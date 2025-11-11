@@ -1,0 +1,20 @@
+<!-- main/templates/blog/comment_confirm_delete.html -->
+{% extends 'main/base.html' %}
+
+{% block title %}댓글 삭제 - Django 블로그{% endblock %}
+
+{% block content %}
+<h1>댓글 삭제</h1>
+
+<div class="alert alert-error" style="margin: 2rem 0;">
+    <p><strong>정말로 이 댓글을 삭제하시겠습니까?</strong></p>
+    <p>내용: {{ comment.content|truncatewords:20 }}</p>
+    <p>이 작업은 되돌릴 수 없습니다.</p>
+</div>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">삭제</button>
+    <a href="{{ comment.post.get_absolute_url }}" class="btn btn-secondary">취소</a>
+</form>
+{% endblock %}

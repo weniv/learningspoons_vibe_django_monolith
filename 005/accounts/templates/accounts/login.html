@@ -1,0 +1,63 @@
+<!-- accounts/templates/accounts/login.html -->
+{% extends 'main/base.html' %}
+
+{% block title %}로그인 - Django 블로그{% endblock %}
+
+{% block extra_css %}
+<style>
+    .form-container {
+        max-width: 500px;
+        margin: 0 auto;
+    }
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: bold;
+    }
+    .form-control {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 1rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h1>로그인</h1>
+
+    {% if form.errors %}
+    <div class="alert alert-error">
+        아이디 또는 비밀번호가 올바르지 않습니다.
+    </div>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="{{ form.username.id_for_label }}">사용자명</label>
+            {{ form.username }}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.password.id_for_label }}">비밀번호</label>
+            {{ form.password }}
+        </div>
+
+        <div>
+            <button type="submit" class="btn btn-primary">로그인</button>
+            <a href="{% url 'main:home' %}" class="btn btn-secondary">취소</a>
+        </div>
+    </form>
+
+    <p style="margin-top: 1rem;">
+        계정이 없으신가요? <a href="{% url 'accounts:signup' %}">회원가입</a>
+    </p>
+</div>
+{% endblock %}

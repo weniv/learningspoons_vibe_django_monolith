@@ -1,0 +1,12 @@
+<!-- main/templates/main/home.html -->
+{% extends 'main/base.html' %}
+
+{% block title %}홈 - Django 블로그{% endblock %}
+
+{% block content %}
+<h1>Django 블로그에 오신 것을 환영합니다!</h1>
+<p>이 블로그는 Django CBV를 사용하여 만들어졌습니다.</p>
+<p>로그인, 회원가입, 게시글 작성/수정/삭제, 댓글 작성/수정/삭제, 마크다운 지원 등의 기능을 제공합니다.</p>
+<br>
+<a href="{% url 'main:post_list' %}" class="btn btn-primary">블로그 보러가기</a>
+{% endblock %}

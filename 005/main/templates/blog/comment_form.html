@@ -1,0 +1,39 @@
+<!-- main/templates/blog/comment_form.html -->
+{% extends 'main/base.html' %}
+
+{% block title %}댓글 수정 - Django 블로그{% endblock %}
+
+{% block extra_css %}
+<style>
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+    .form-control {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 1rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1>댓글 수정</h1>
+
+<form method="post">
+    {% csrf_token %}
+
+    <div class="form-group">
+        {{ form.content }}
+        {% if form.content.errors %}
+        <div class="alert alert-error">{{ form.content.errors }}</div>
+        {% endif %}
+    </div>
+
+    <div>
+        <button type="submit" class="btn btn-primary">수정 완료</button>
+        <a href="{{ comment.post.get_absolute_url }}" class="btn btn-secondary">취소</a>
+    </div>
+</form>
+{% endblock %}

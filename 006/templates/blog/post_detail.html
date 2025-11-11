@@ -1,0 +1,115 @@
+<!-- templates/blog/post_detail.html -->
+{% extends 'main/base.html' %}
+{% load markdown_extras %}
+
+{% block title %}{{ post.title }} - Django 블로그{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <!-- 게시글 헤더 -->
+    <article class="bg-white rounded-lg shadow-md p-8 mb-6">
+        <h1 class="text-4xl font-bold text-gray-800 mb-4">{{ post.title }}</h1>
+
+        <div class="flex items-center justify-between mb-4 pb-4 border-b">
+            <div class="text-sm text-gray-600">
+                작성자: <strong>{{ post.author.get_display_name }}</strong> |
+                작성일: {{ post.created_at|date:"Y년 m월 d일 H:i" }} |
+                수정일: {{ post.updated_at|date:"Y년 m월 d일 H:i" }}
+            </div>
+            <div class="text-sm text-gray-600">
+                조회수: {{ post.view_count }} | 좋아요: {{ post.total_likes }}
+            </div>
+        </div>
+
+        <!-- 태그 -->
+        <div class="mb-6">
+            {% for tag in post.tags.all %}
+            <a href="{% url 'blog:post_by_tag' tag.slug %}"
+               class="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm hover:bg-blue-200 transition mr-2">
+                {{ tag.name }}
+            </a>
+            {% empty %}
+            <span class="text-gray-500 text-sm">태그 없음</span>
+            {% endfor %}
+        </div>
+
+        <!-- 썸네일 이미지 -->
+        {% if post.thumbnail %}
+        <div class="mb-6">
+            <img src="{{ post.thumbnail.url }}" alt="{{ post.title }}" class="w-full rounded-lg">
+        </div>
+        {% endif %}
+
+        <!-- 게시글 내용 -->
+        <div class="prose max-w-none text-gray-700 leading-relaxed">
+            {{ post.content|markdown|safe }}
+        </div>
+
+        <!-- 액션 버튼 -->
+        <div class="mt-8 pt-6 border-t flex space-x-3">
+            <a href="{% url 'blog:post_list' %}"
+               class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-6 rounded-lg transition">
+                목록으로
+            </a>
+            {% if user == post.author %}
+            <a href="{% url 'blog:post_update' post.pk %}"
+               class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg transition">
+                수정
+            </a>
+            <a href="{% url 'blog:post_delete' post.pk %}"
+               class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-lg transition">
+                삭제
+            </a>
+            {% endif %}
+        </div>
+    </article>
+
+    <!-- 댓글 섹션 -->
+    <section class="bg-white rounded-lg shadow-md p-8">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6">댓글 ({{ post.comments.count }})</h2>
+
+        <!-- 댓글 작성 폼 -->
+        {% if user.is_authenticated %}
+        <form method="post" action="{% url 'blog:comment_create' post.pk %}" class="mb-8">
+            {% csrf_token %}
+            <div class="mb-4">
+                {{ comment_form.content }}
+            </div>
+            <button type="submit"
+                    class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg transition">
+                댓글 작성
+            </button>
+        </form>
+        {% else %}
+        <p class="mb-8 text-gray-600">
+            <a href="{% url 'accounts:login' %}" class="text-blue-600 hover:underline">로그인</a>하시면 댓글을 작성할 수 있습니다.
+        </p>
+        {% endif %}
+
+        <!-- 댓글 목록 -->
+        <div class="space-y-4">
+            {% for comment in post.comments.all %}
+            <div class="bg-gray-50 rounded-lg p-4">
+                <div class="flex justify-between items-start mb-2">
+                    <div class="text-sm text-gray-600">
+                        <strong>{{ comment.author.get_display_name }}</strong> |
+                        {{ comment.created_at|date:"Y년 m월 d일 H:i" }}
+                    </div>
+                    {% if user == comment.author %}
+                    <div class="flex space-x-2">
+                        <a href="{% url 'blog:comment_update' comment.pk %}"
+                           class="text-blue-600 hover:underline text-sm">수정</a>
+                        <a href="{% url 'blog:comment_delete' comment.pk %}"
+                           class="text-red-600 hover:underline text-sm">삭제</a>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="text-gray-700">{{ comment.content|linebreaks }}</div>
+            </div>
+            {% empty %}
+            <p class="text-gray-500 text-center py-8">첫 댓글을 작성해보세요!</p>
+            {% endfor %}
+        </div>
+    </section>
+</div>
+{% endblock %}

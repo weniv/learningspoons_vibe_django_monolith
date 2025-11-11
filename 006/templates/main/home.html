@@ -1,0 +1,15 @@
+<!-- templates/main/home.html -->
+{% extends 'main/base.html' %}
+
+{% block title %}홈 - Django 블로그{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto text-center">
+    <h1 class="text-5xl font-bold text-gray-800 mb-6">Django 블로그에 오신 것을 환영합니다!</h1>
+    <p class="text-xl text-gray-600 mb-4">이 블로그는 Django CBV를 사용하여 만들어졌습니다.</p>
+    <p class="text-lg text-gray-500 mb-8">로그인, 회원가입, 게시글 작성/수정/삭제, 댓글 작성/수정/삭제, 마크다운 지원 등의 기능을 제공합니다.</p>
+    <a href="{% url 'blog:post_list' %}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg text-lg transition">
+        블로그 보러가기
+    </a>
+</div>
+{% endblock %}

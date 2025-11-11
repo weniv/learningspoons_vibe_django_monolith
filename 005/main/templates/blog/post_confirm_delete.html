@@ -1,0 +1,20 @@
+<!-- main/templates/blog/post_confirm_delete.html -->
+{% extends 'main/base.html' %}
+
+{% block title %}게시글 삭제 - Django 블로그{% endblock %}
+
+{% block content %}
+<h1>게시글 삭제</h1>
+
+<div class="alert alert-error" style="margin: 2rem 0;">
+    <p><strong>정말로 이 게시글을 삭제하시겠습니까?</strong></p>
+    <p>제목: <strong>{{ post.title }}</strong></p>
+    <p>이 작업은 되돌릴 수 없습니다.</p>
+</div>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">삭제</button>
+    <a href="{% url 'main:post_detail' post.pk %}" class="btn btn-secondary">취소</a>
+</form>
+{% endblock %}

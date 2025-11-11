@@ -1,0 +1,53 @@
+<!-- templates/accounts/login.html -->
+{% extends 'main/base.html' %}
+
+{% block title %}로그인 - Django 블로그{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto">
+    <div class="bg-white rounded-lg shadow-md p-8">
+        <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">로그인</h1>
+
+        {% if form.errors %}
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+            아이디 또는 비밀번호가 올바르지 않습니다.
+        </div>
+        {% endif %}
+
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
+
+            <div>
+                <label for="{{ form.username.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                    사용자명
+                </label>
+                <input type="text" name="username" id="{{ form.username.id_for_label }}"
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                       required>
+            </div>
+
+            <div>
+                <label for="{{ form.password.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                    비밀번호
+                </label>
+                <input type="password" name="password" id="{{ form.password.id_for_label }}"
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                       required>
+            </div>
+
+            <div class="flex space-x-4">
+                <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition">
+                    로그인
+                </button>
+                <a href="{% url 'main:home' %}" class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-lg text-center transition">
+                    취소
+                </a>
+            </div>
+        </form>
+
+        <p class="mt-4 text-center text-gray-600">
+            계정이 없으신가요? <a href="{% url 'accounts:signup' %}" class="text-blue-600 hover:underline">회원가입</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

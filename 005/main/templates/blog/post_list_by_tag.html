@@ -1,0 +1,54 @@
+<!-- main/templates/blog/post_list_by_tag.html -->
+{% extends 'main/base.html' %}
+
+{% block title %}{{ tag.name }} 태그 - Django 블로그{% endblock %}
+
+{% block extra_css %}
+<style>
+    .post-list {
+        list-style: none;
+    }
+    .post-item {
+        background-color: #f8f9fa;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        border-radius: 8px;
+        border-left: 4px solid #3498db;
+    }
+    .post-item h2 {
+        margin-bottom: 0.5rem;
+    }
+    .post-item h2 a {
+        color: #2c3e50;
+        text-decoration: none;
+    }
+    .post-item h2 a:hover {
+        color: #3498db;
+    }
+    .post-meta {
+        color: #7f8c8d;
+        font-size: 0.9rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1>'{{ tag.name }}' 태그의 게시글</h1>
+
+{% if posts %}
+    <ul class="post-list">
+        {% for post in posts %}
+        <li class="post-item">
+            <h2><a href="{% url 'main:post_detail' post.pk %}">{{ post.title }}</a></h2>
+            <div class="post-meta">
+                작성자: {{ post.author.username }} | 작성일: {{ post.created_at|date:"Y년 m월 d일 H:i" }}
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>이 태그에 해당하는 게시글이 없습니다.</p>
+{% endif %}
+
+<a href="{% url 'main:post_list' %}" class="btn btn-secondary">전체 목록으로</a>
+{% endblock %}

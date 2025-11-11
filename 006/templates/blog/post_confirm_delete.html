@@ -1,0 +1,30 @@
+<!-- templates/blog/post_confirm_delete.html -->
+{% extends 'main/base.html' %}
+
+{% block title %}게시글 삭제 - Django 블로그{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto">
+    <div class="bg-white rounded-lg shadow-md p-8">
+        <h1 class="text-3xl font-bold text-gray-800 mb-6">게시글 삭제</h1>
+
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
+            <p class="font-bold mb-2">정말로 이 게시글을 삭제하시겠습니까?</p>
+            <p>제목: <strong>{{ post.title }}</strong></p>
+            <p class="mt-2">이 작업은 되돌릴 수 없습니다.</p>
+        </div>
+
+        <form method="post" class="flex space-x-4">
+            {% csrf_token %}
+            <button type="submit"
+                    class="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-lg transition">
+                삭제
+            </button>
+            <a href="{% url 'blog:post_detail' post.pk %}"
+               class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-6 rounded-lg text-center transition">
+                취소
+            </a>
+        </form>
+    </div>
+</div>
+{% endblock %}
